@@ -38,16 +38,18 @@
     /* ── Top bar ── */
     .topbar {
       display: flex; align-items: center; justify-content: center;
-      height: 52px; background: var(--topbar-bg);
+      height: 64px; background: var(--topbar-bg);
       flex-shrink: 0; position: relative; z-index: 100;
     }
     .topbar-back {
       position: absolute; left: 16px;
       display: flex; align-items: center; gap: 7px;
-      color: #fff; font-size: 13px; font-weight: 500;
-      cursor: pointer; background: none; border: none; opacity: 0.8;
+      color: #fff; font-size: 16px; line-height: 24px; font-weight: 500;
+      cursor: pointer; font-family: inherit;
+      background: transparent; border: 1px solid #757575; border-radius: 8px;
+      height: 40px; padding: 0 16px;
     }
-    .topbar-back:hover { opacity: 1; }
+    .topbar-back:hover { border-color: #9e9e9e; }
     .topbar-title { font-size: 18px; line-height: 24px; font-weight: 500; }
 
     /* ── Screen system ── */
@@ -57,7 +59,7 @@
     /* ── Panels row ── */
     .panels-row {
       flex: 1; display: flex; gap: 24px;
-      padding: 16px; overflow: hidden; min-height: 0;
+      padding: 4px 16px 16px; overflow: hidden; min-height: 0;
     }
 
     /* Chat screen panels row has no bottom padding (bottom-bar handles that space) */
@@ -95,7 +97,7 @@
       background: var(--panel-gradient);
       padding: 28px 24px 24px; flex-shrink: 0;
     }
-    .panel-heading { font-size: 24px; font-weight: 700; color: #111; line-height: 1.2; }
+    .panel-heading { font-size: 24px; font-weight: 700; color: #212121; line-height: 1.2; }
     .panel-heading-row {
       display: flex; justify-content: space-between; align-items: flex-start;
     }
@@ -106,17 +108,17 @@
     .panel-close:hover { color: rgba(0,0,0,0.75); }
 
     .lbl {
-      font-size: 10px; font-weight: 600; color: rgba(0,0,0,0.45);
+      font-size: 12px; line-height: 14px; font-weight: 600; color: rgba(0,0,0,0.45);
       text-transform: uppercase; letter-spacing: 0.7px;
-      margin-top: 18px; margin-bottom: 5px; display: block;
+      margin-top: 18px; margin-bottom: 8px; display: block;
     }
-    .challenge-txt { font-size: 14px; color: #1a1a1a; line-height: 1.6; }
+    .challenge-txt { font-size: 14px; line-height: 24px; font-weight: 500; color: #212121; }
 
     .roles-card {
       margin-top: 18px;
       display: flex; gap: 32px;
     }
-    .role-val { font-size: 14px; line-height: 24px; font-weight: 500; color: #111; margin-top: 8px; }
+    .role-val { font-size: 14px; line-height: 24px; font-weight: 500; color: #212121; }
 
     /* BOTTOM — white background, scrollable */
     .panel-white {
@@ -127,7 +129,7 @@
     .panel-white-inner { padding: 24px 24px 8px; }
 
     .section { margin-bottom: 24px; }
-    .section-title { font-size: 16px; font-weight: 600; color: #111; margin-bottom: 10px; }
+    .section-title { font-size: 16px; font-weight: 600; color: #212121; margin-bottom: 10px; }
     .section-txt   { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.6; }
     .section-intro { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.6; margin-bottom: 8px; }
     .show-more {
@@ -236,10 +238,23 @@
     .msgs::-webkit-scrollbar { width: 4px; }
     .msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
 
-    /* No avatars */
-    .msg-row { display: flex; max-width: 74%; }
+    .msg-row { display: flex; max-width: 74%; align-items: flex-start; gap: 12px; }
     .msg-row.ai   { align-self: flex-start; }
     .msg-row.user { align-self: flex-end; }
+
+    /* Avatar circle — hidden unless fullscreen mode */
+    .msg-ava {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; flex-shrink: 0;
+    }
+    .ai   .msg-ava { background: var(--agent-bubble); color: #fff; }
+    .user .msg-ava { background: var(--msg-gradient); color: #1a1a1a; }
+
+    /* Fullscreen mode: both panels collapsed — all messages left, avatars visible */
+    #messages.fullscreen .msg-row { align-self: flex-start; max-width: 60%; }
+    #messages.fullscreen .msg-ava { display: flex; width: 44px; height: 44px; font-size: 17px; }
+    #messages.fullscreen .msg-row.user .bubble { border-bottom-right-radius: 18px; border-bottom-left-radius: 5px; }
 
     .bubble { padding: 11px 16px; font-size: 14px; line-height: 1.55; border-radius: 18px; }
     .ai   .bubble { background: var(--agent-bubble); color: #fff; border-bottom-left-radius: 5px; }
@@ -346,26 +361,29 @@
     .fb-title { font-size: 24px; font-weight: 600; margin-bottom: 28px; }
     .spinner { width: 42px; height: 42px; margin: 0 auto 44px; border: 3px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.7); border-radius: 50%; animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .fb-qs { display: flex; flex-direction: column; gap: 14px; margin-bottom: 52px; }
-    .fb-q  { font-size: 15px; color: rgba(255,255,255,0.45); }
-    .fb-q.big { font-size: 21px; font-weight: 600; color: #fff; }
-    .sc-card { display: flex; border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); max-width: 480px; width: 100%; text-align: left; }
-    .sc-thumb { width: 130px; flex-shrink: 0; background: #2a2a2a; }
+    .sc-card { display: flex; border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.06); max-width: 920px; width: 100%; text-align: left; height: 212px; }
+    .sc-thumb { width: 447px; flex-shrink: 0; background: #2a2a2a; }
     .sc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .sc-body { padding: 18px 16px; flex: 1; }
+    .sc-body { padding: 18px 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .sc-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
     .sc-desc { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.55; margin-bottom: 14px; }
-    .sc-acts { display: flex; gap: 8px; }
-    .sc-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 16px; }
-    .sc-btn:hover { background: rgba(255,255,255,0.15); }
-    .back-btn {
-      margin-top: 28px; height: 40px; padding: 8px 16px;
-      background: transparent; border: 1px solid rgba(255,255,255,0.45);
-      border-radius: 8px; color: #fff; font-size: 13px; font-weight: 500;
+    .sc-acts { display: flex; justify-content: space-between; align-items: center; }
+    .sc-replay-btn {
+      height: 40px; padding: 0 20px;
+      background: #fff; border: none; border-radius: 8px;
+      font-size: 16px; line-height: 24px; font-weight: 600; color: #212121;
       cursor: pointer; font-family: inherit;
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 8px;
     }
-    .back-btn:hover { border-color: rgba(255,255,255,0.75); }
+    .sc-replay-btn:hover { background: #f0f0f0; }
+    .sc-vote-btns { display: flex; gap: 8px; }
+    .sc-vote-btn {
+      width: 40px; height: 40px;
+      background: none; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .sc-vote-btn:hover { opacity: 0.75; }
   </style>
 </head>
 <body>
@@ -453,7 +471,7 @@
           <div class="cta-name">Tom</div>
         </div>
         <!-- History button bottom-right, 24px padding -->
-        <button class="icon-btn hist-corner-btn" title="Attempts history">
+        <button class="icon-btn hist-corner-btn" onclick="toggleAttPre()" title="Attempts history">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <mask id="mp2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32"><rect width="32" height="32" fill="#D9D9D9"/></mask>
             <g mask="url(#mp2)">
@@ -461,6 +479,31 @@
             </g>
           </svg>
         </button>
+      </div>
+
+      <!-- Attempts history panel (pre-chat) -->
+      <div class="attempts-panel" id="att-panel-pre">
+        <div class="att-head">
+          <span class="att-title">Attempts history</span>
+          <button class="att-close" onclick="toggleAttPre()">×</button>
+        </div>
+        <div class="att-list">
+          <div class="att-card">
+            <div class="att-top"><span class="att-badge goal">Goal reached</span><span class="att-date">12 Feb 2026</span></div>
+            <div class="att-desc">When your focus shifts from praise to process, you risk demotivating your team member.</div>
+            <div class="att-foot"><span class="att-dur">Duration: 11 min</span><div class="att-btns"><button class="att-btn" title="Delete"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="del2a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#del2a)"><path d="M7 21C6.45 21 5.97917 20.8042 5.5875 20.4125C5.19583 20.0208 5 19.55 5 19V6C4.71667 6 4.47917 5.90417 4.2875 5.7125C4.09583 5.52083 4 5.28333 4 5C4 4.71667 4.09583 4.47917 4.2875 4.2875C4.47917 4.09583 4.71667 4 5 4H9C9 3.71667 9.09583 3.47917 9.2875 3.2875C9.47917 3.09583 9.71667 3 10 3H14C14.2833 3 14.5208 3.09583 14.7125 3.2875C14.9042 3.47917 15 3.71667 15 4H19C19.2833 4 19.5208 4.09583 19.7125 4.2875C19.9042 4.47917 20 4.71667 20 5C20 5.28333 19.9042 5.52083 19.7125 5.7125C19.5208 5.90417 19.2833 6 19 6V19C19 19.55 18.8042 20.0208 18.4125 20.4125C18.0208 20.8042 17.55 21 17 21H7ZM17 6H7V19H17V6ZM10 17C10.2833 17 10.5208 16.9042 10.7125 16.7125C10.9042 16.5208 11 16.2833 11 16V9C11 8.71667 10.9042 8.47917 10.7125 8.2875C10.5208 8.09583 10.2833 8 10 8C9.71667 8 9.47917 8.09583 9.2875 8.2875C9.09583 8.47917 9 8.71667 9 9V16C9 16.2833 9.09583 16.5208 9.2875 16.7125C9.47917 16.9042 9.71667 17 10 17ZM14 17C14.2833 17 14.5208 16.9042 14.7125 16.7125C14.9042 16.5208 15 16.2833 15 16V9C15 8.71667 14.9042 8.47917 14.7125 8.2875C14.5208 8.09583 14.2833 8 14 8C13.7167 8 13.4792 8.09583 13.2875 8.2875C13.0958 8.47917 13 8.71667 13 9V16C13 16.2833 13.0958 16.5208 13.2875 16.7125C13.4792 16.9042 13.7167 17 14 17Z" fill="white"/></g></svg></button><button class="att-btn" title="Open"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="arr2a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#arr2a)"><path d="M16 8.4L7.10005 17.3C6.91672 17.4833 6.68338 17.575 6.40005 17.575C6.11672 17.575 5.88338 17.4833 5.70005 17.3C5.51672 17.1167 5.42505 16.8833 5.42505 16.6C5.42505 16.3167 5.51672 16.0833 5.70005 15.9L14.6 7H7.00005C6.71672 7 6.47922 6.90417 6.28755 6.7125C6.09588 6.52083 6.00005 6.28333 6.00005 6C6.00005 5.71667 6.09588 5.47917 6.28755 5.2875C6.47922 5.09583 6.71672 5 7.00005 5H17C17.2834 5 17.5209 5.09583 17.7125 5.2875C17.9042 5.47917 18 5.71667 18 6V16C18 16.2833 17.9042 16.5208 17.7125 16.7125C17.5209 16.9042 17.2834 17 17 17C16.7167 17 16.4792 16.9042 16.2875 16.7125C16.0959 16.5208 16 16.2833 16 16V8.4Z" fill="white"/></g></svg></button></div></div>
+          </div>
+          <div class="att-card">
+            <div class="att-top"><span class="att-badge not-there">Not there yet</span><span class="att-date">12 Feb 2026</span></div>
+            <div class="att-desc">Focusing on a process issue first derailed your original goal of giving praise.</div>
+            <div class="att-foot"><span class="att-dur">Duration: 5 min</span><div class="att-btns"><button class="att-btn" title="Delete"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="del2b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#del2b)"><path d="M7 21C6.45 21 5.97917 20.8042 5.5875 20.4125C5.19583 20.0208 5 19.55 5 19V6C4.71667 6 4.47917 5.90417 4.2875 5.7125C4.09583 5.52083 4 5.28333 4 5C4 4.71667 4.09583 4.47917 4.2875 4.2875C4.47917 4.09583 4.71667 4 5 4H9C9 3.71667 9.09583 3.47917 9.2875 3.2875C9.47917 3.09583 9.71667 3 10 3H14C14.2833 3 14.5208 3.09583 14.7125 3.2875C14.9042 3.47917 15 3.71667 15 4H19C19.2833 4 19.5208 4.09583 19.7125 4.2875C19.9042 4.47917 20 4.71667 20 5C20 5.28333 19.9042 5.52083 19.7125 5.7125C19.5208 5.90417 19.2833 6 19 6V19C19 19.55 18.8042 20.0208 18.4125 20.4125C18.0208 20.8042 17.55 21 17 21H7ZM17 6H7V19H17V6ZM10 17C10.2833 17 10.5208 16.9042 10.7125 16.7125C10.9042 16.5208 11 16.2833 11 16V9C11 8.71667 10.9042 8.47917 10.7125 8.2875C10.5208 8.09583 10.2833 8 10 8C9.71667 8 9.47917 8.09583 9.2875 8.2875C9.09583 8.47917 9 8.71667 9 9V16C9 16.2833 9.09583 16.5208 9.2875 16.7125C9.47917 16.9042 9.71667 17 10 17ZM14 17C14.2833 17 14.5208 16.9042 14.7125 16.7125C14.9042 16.5208 15 16.2833 15 16V9C15 8.71667 14.9042 8.47917 14.7125 8.2875C14.5208 8.09583 14.2833 8 14 8C13.7167 8 13.4792 8.09583 13.2875 8.2875C13.0958 8.47917 13 8.71667 13 9V16C13 16.2833 13.0958 16.5208 13.2875 16.7125C13.4792 16.9042 13.7167 17 14 17Z" fill="white"/></g></svg></button><button class="att-btn" title="Open"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="arr2b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#arr2b)"><path d="M16 8.4L7.10005 17.3C6.91672 17.4833 6.68338 17.575 6.40005 17.575C6.11672 17.575 5.88338 17.4833 5.70005 17.3C5.51672 17.1167 5.42505 16.8833 5.42505 16.6C5.42505 16.3167 5.51672 16.0833 5.70005 15.9L14.6 7H7.00005C6.71672 7 6.47922 6.90417 6.28755 6.7125C6.09588 6.52083 6.00005 6.28333 6.00005 6C6.00005 5.71667 6.09588 5.47917 6.28755 5.2875C6.47922 5.09583 6.71672 5 7.00005 5H17C17.2834 5 17.5209 5.09583 17.7125 5.2875C17.9042 5.47917 18 5.71667 18 6V16C18 16.2833 17.9042 16.5208 17.7125 16.7125C17.5209 16.9042 17.2834 17 17 17C16.7167 17 16.4792 16.9042 16.2875 16.7125C16.0959 16.5208 16 16.2833 16 16V8.4Z" fill="white"/></g></svg></button></div></div>
+          </div>
+          <div class="att-card">
+            <div class="att-top"><span class="att-badge almost">Almost there</span><span class="att-date">12 Feb 2026</span></div>
+            <div class="att-desc">Praise lands with more impact when it's the opening statement, not a conclusion after questioning.</div>
+            <div class="att-foot"><span class="att-dur">Duration: 27 min</span><div class="att-btns"><button class="att-btn" title="Delete"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="del2c" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#del2c)"><path d="M7 21C6.45 21 5.97917 20.8042 5.5875 20.4125C5.19583 20.0208 5 19.55 5 19V6C4.71667 6 4.47917 5.90417 4.2875 5.7125C4.09583 5.52083 4 5.28333 4 5C4 4.71667 4.09583 4.47917 4.2875 4.2875C4.47917 4.09583 4.71667 4 5 4H9C9 3.71667 9.09583 3.47917 9.2875 3.2875C9.47917 3.09583 9.71667 3 10 3H14C14.2833 3 14.5208 3.09583 14.7125 3.2875C14.9042 3.47917 15 3.71667 15 4H19C19.2833 4 19.5208 4.09583 19.7125 4.2875C19.9042 4.47917 20 4.71667 20 5C20 5.28333 19.9042 5.52083 19.7125 5.7125C19.5208 5.90417 19.2833 6 19 6V19C19 19.55 18.8042 20.0208 18.4125 20.4125C18.0208 20.8042 17.55 21 17 21H7ZM17 6H7V19H17V6ZM10 17C10.2833 17 10.5208 16.9042 10.7125 16.7125C10.9042 16.5208 11 16.2833 11 16V9C11 8.71667 10.9042 8.47917 10.7125 8.2875C10.5208 8.09583 10.2833 8 10 8C9.71667 8 9.47917 8.09583 9.2875 8.2875C9.09583 8.47917 9 8.71667 9 9V16C9 16.2833 9.09583 16.5208 9.2875 16.7125C9.47917 16.9042 9.71667 17 10 17ZM14 17C14.2833 17 14.5208 16.9042 14.7125 16.7125C14.9042 16.5208 15 16.2833 15 16V9C15 8.71667 14.9042 8.47917 14.7125 8.2875C14.5208 8.09583 14.2833 8 14 8C13.7167 8 13.4792 8.09583 13.2875 8.2875C13.0958 8.47917 13 8.71667 13 9V16C13 16.2833 13.0958 16.5208 13.2875 16.7125C13.4792 16.9042 13.7167 17 14 17Z" fill="white"/></g></svg></button><button class="att-btn" title="Open"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="arr2c" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#arr2c)"><path d="M16 8.4L7.10005 17.3C6.91672 17.4833 6.68338 17.575 6.40005 17.575C6.11672 17.575 5.88338 17.4833 5.70005 17.3C5.51672 17.1167 5.42505 16.8833 5.42505 16.6C5.42505 16.3167 5.51672 16.0833 5.70005 15.9L14.6 7H7.00005C6.71672 7 6.47922 6.90417 6.28755 6.7125C6.09588 6.52083 6.00005 6.28333 6.00005 6C6.00005 5.71667 6.09588 5.47917 6.28755 5.2875C6.47922 5.09583 6.71672 5 7.00005 5H17C17.2834 5 17.5209 5.09583 17.7125 5.2875C17.9042 5.47917 18 5.71667 18 6V16C18 16.2833 17.9042 16.5208 17.7125 16.7125C17.5209 16.9042 17.2834 17 17 17C16.7167 17 16.4792 16.9042 16.2875 16.7125C16.0959 16.5208 16 16.2833 16 16V8.4Z" fill="white"/></g></svg></button></div></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -629,29 +672,33 @@
   <div class="screen" id="screen-feedback">
     <div class="fb-title">Generating your personalized feedback</div>
     <div class="spinner" id="spinner"></div>
-    <div class="fb-qs">
-      <div class="fb-q">How was your experience?</div>
-      <div class="fb-q">How do you feel?</div>
-      <div class="fb-q big">What would you do differently next time?</div>
-    </div>
     <div class="sc-card">
       <div class="sc-thumb"><img src="tom-bg.png" alt="One-on-one meeting"></div>
       <div class="sc-body">
-        <div class="sc-name">One-on-one meeting</div>
-        <div class="sc-desc">Practice building rapport and trust during a one-on-one meeting with a hesitant employee.</div>
+        <div>
+          <div class="sc-name">One-on-one meeting</div>
+          <div class="sc-desc">Practice building rapport and trust during a one-on-one meeting with a hesitant employee.</div>
+        </div>
         <div class="sc-acts">
-          <button class="sc-btn" onclick="tryAgain()">↺</button>
-          <button class="sc-btn">♡</button>
+          <button class="sc-replay-btn" onclick="tryAgain()">Role-play again</button>
+          <div class="sc-vote-btns">
+            <button class="sc-vote-btn" title="Like">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="lk1" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40"><rect width="40" height="40" fill="#D9D9D9"/></mask><g mask="url(#lk1)"><path d="M19.9997 33.875C19.6108 33.875 19.215 33.8056 18.8122 33.6667C18.4094 33.5278 18.0552 33.3056 17.7497 33L14.8747 30.375C11.9302 27.6806 9.27051 25.007 6.89551 22.3542C4.52051 19.7014 3.33301 16.7778 3.33301 13.5834C3.33301 10.9722 4.20801 8.79169 5.95801 7.04169C7.70801 5.29169 9.88856 4.41669 12.4997 4.41669C13.9719 4.41669 15.3608 4.72919 16.6663 5.35419C17.9719 5.97919 19.083 6.83335 19.9997 7.91669C20.9163 6.83335 22.0275 5.97919 23.333 5.35419C24.6386 4.72919 26.0275 4.41669 27.4997 4.41669C30.1108 4.41669 32.2913 5.29169 34.0413 7.04169C35.7913 8.79169 36.6663 10.9722 36.6663 13.5834C36.6663 16.7778 35.4858 19.7084 33.1247 22.375C30.7636 25.0417 28.083 27.7222 25.083 30.4167L22.2497 33C21.9441 33.3056 21.59 33.5278 21.1872 33.6667C20.7844 33.8056 20.3886 33.875 19.9997 33.875ZM18.4163 11.25C17.6108 10.1111 16.7497 9.24308 15.833 8.64585C14.9163 8.04863 13.8052 7.75002 12.4997 7.75002C10.833 7.75002 9.44412 8.30558 8.33301 9.41669C7.2219 10.5278 6.66634 11.9167 6.66634 13.5834C6.66634 15.0278 7.18023 16.5625 8.20801 18.1875C9.23579 19.8125 10.465 21.3889 11.8955 22.9167C13.3261 24.4445 14.7983 25.875 16.3122 27.2084C17.8261 28.5417 19.0552 29.6389 19.9997 30.5C20.9441 29.6389 22.1733 28.5417 23.6872 27.2084C25.2011 25.875 26.6733 24.4445 28.1038 22.9167C29.5344 21.3889 30.7636 19.8125 31.7913 18.1875C32.8191 16.5625 33.333 15.0278 33.333 13.5834C33.333 11.9167 32.7775 10.5278 31.6663 9.41669C30.5552 8.30558 29.1663 7.75002 27.4997 7.75002C26.1941 7.75002 25.083 8.04863 24.1663 8.64585C23.2497 9.24308 22.3886 10.1111 21.583 11.25C21.3886 11.5278 21.1525 11.7361 20.8747 11.875C20.5969 12.0139 20.3052 12.0834 19.9997 12.0834C19.6941 12.0834 19.4025 12.0139 19.1247 11.875C18.8469 11.7361 18.6108 11.5278 18.4163 11.25Z" fill="#BDBDBD"/></g></svg>
+            </button>
+            <button class="sc-vote-btn" title="Dislike">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="dk1" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40"><rect width="40" height="40" fill="#D9D9D9"/></mask><g mask="url(#dk1)"><path d="M6.66634 14.1667C6.66634 15 6.81217 15.7917 7.10384 16.5417C7.39551 17.2917 7.91634 18.1458 8.66634 19.1042C9.41634 20.0625 10.4302 21.2083 11.708 22.5417C12.9858 23.875 14.6108 25.5417 16.583 27.5417C16.6941 27.6528 16.8122 27.6875 16.9372 27.6458C17.0622 27.6042 17.1386 27.5139 17.1663 27.375L17.958 20C16.5136 20 15.3608 19.4375 14.4997 18.3125C13.6386 17.1875 13.4025 15.9444 13.7913 14.5833L15.3747 9.04167C14.9302 8.81944 14.465 8.64583 13.9788 8.52083C13.4927 8.39583 12.9997 8.33333 12.4997 8.33333C10.8886 8.33333 9.51356 8.90278 8.37467 10.0417C7.23579 11.1806 6.66634 12.5556 6.66634 14.1667ZM33.333 14.1667C33.333 12.5556 32.7636 11.1806 31.6247 10.0417C30.4858 8.90278 29.1108 8.33333 27.4997 8.33333C27.1941 8.33333 26.8886 8.35417 26.583 8.39583C26.2775 8.4375 25.9719 8.51389 25.6663 8.625L24.6663 11.6667C25.9163 12 26.84 12.7431 27.4372 13.8958C28.0344 15.0486 28.1386 16.25 27.7497 17.5L25.583 24.7917C25.5275 24.9306 25.5761 25.0486 25.7288 25.1458C25.8816 25.2431 26.0275 25.2222 26.1663 25.0833C27.6941 23.5278 28.9302 22.2292 29.8747 21.1875C30.8191 20.1458 31.5483 19.2292 32.0622 18.4375C32.5761 17.6458 32.9163 16.9306 33.083 16.2917C33.2497 15.6528 33.333 14.9444 33.333 14.1667ZM20.0413 33.9167C19.6525 33.9167 19.2705 33.8472 18.8955 33.7083C18.5205 33.5694 18.1802 33.3611 17.8747 33.0833C14.8469 30.4167 12.3886 28.1736 10.4997 26.3542C8.61079 24.5347 7.13162 22.9375 6.06217 21.5625C4.99273 20.1875 4.27051 18.9306 3.89551 17.7917C3.52051 16.6528 3.33301 15.4444 3.33301 14.1667C3.33301 11.6111 4.2219 9.44444 5.99967 7.66667C7.77745 5.88889 9.94412 5 12.4997 5C14.333 5 15.9441 5.35417 17.333 6.0625C18.7219 6.77083 19.2219 7.79167 18.833 9.125L17.2913 14.5417C17.1525 15.0972 17.2427 15.5903 17.5622 16.0208C17.8816 16.4514 18.3191 16.6667 18.8747 16.6667H21.6663L20.583 27.25C20.5552 27.4722 20.6455 27.5972 20.8538 27.625C21.0622 27.6528 21.1941 27.5694 21.2497 27.375L24.333 17.1667C24.4997 16.6111 24.4163 16.1111 24.083 15.6667C23.7497 15.2222 23.3052 15 22.7497 15H19.9997L22.5413 7.45833C22.8469 6.48611 23.4858 5.83333 24.458 5.5C25.4302 5.16667 26.4441 5 27.4997 5C30.0552 5 32.2219 5.88889 33.9997 7.66667C35.7775 9.44444 36.6663 11.6111 36.6663 14.1667C36.6663 15.3889 36.4441 16.5972 35.9997 17.7917C35.5552 18.9861 34.7844 20.3056 33.6872 21.75C32.59 23.1944 31.1177 24.8264 29.2705 26.6458C27.4233 28.4653 25.083 30.6111 22.2497 33.0833C21.9441 33.3611 21.5969 33.5694 21.208 33.7083C20.8191 33.8472 20.4302 33.9167 20.0413 33.9167Z" fill="#BDBDBD"/></g></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <button class="back-btn" onclick="goToStart()">← Back to Scenario library</button>
   </div>
 
 </div>
 <script>
   let infoOpen = true;
   let attOpen  = false;
+  let attPreOpen = false;
   const REPLIES = [
     "Thanks, that means a lot. I've been navigating some changes on the project — it's been a bit of a rollercoaster, honestly.",
     "Yeah… I think the main challenge has been the shifting priorities. It's hard to stay motivated when the goalposts keep moving.",
@@ -679,14 +726,10 @@
 
   function endChat() {
     show('screen-feedback');
-    setTimeout(() => {
-      const s = document.getElementById('spinner');
-      if (s) { s.style.opacity = '0'; s.style.transition = 'opacity 0.5s'; }
-    }, 3000);
   }
 
   function tryAgain() { reset(); show('screen-prechat'); }
-  function goToStart() { reset(); document.getElementById('spinner').style.opacity = '1'; show('screen-prechat'); }
+  function goToStart() { reset(); show('screen-prechat'); }
   function reset() { document.getElementById('messages').innerHTML = ''; ri = 0; }
 
   function handleBack() {
@@ -700,12 +743,23 @@
     infoOpen = !infoOpen;
     document.getElementById('ip-chat').classList.toggle('collapsed', !infoOpen);
     document.getElementById('toggle-info-btn').classList.toggle('active', infoOpen);
+    updateFullscreen();
   }
 
   function toggleAtt() {
     attOpen = !attOpen;
     document.getElementById('att-panel').classList.toggle('open', attOpen);
     document.getElementById('toggle-att-btn').classList.toggle('active', attOpen);
+    updateFullscreen();
+  }
+
+  function updateFullscreen() {
+    document.getElementById('messages').classList.toggle('fullscreen', !infoOpen && !attOpen);
+  }
+
+  function toggleAttPre() {
+    attPreOpen = !attPreOpen;
+    document.getElementById('att-panel-pre').classList.toggle('open', attPreOpen);
   }
 
   function toggleStory(btn) {
@@ -725,7 +779,8 @@
     const wrap = document.getElementById('messages');
     const row = document.createElement('div');
     row.className = `msg-row ${from}`;
-    row.innerHTML = `<div class="bubble">${esc(text)}</div>`;
+    const initial = from === 'ai' ? 'T' : 'M';
+    row.innerHTML = `<div class="msg-ava">${initial}</div><div class="bubble">${esc(text)}</div>`;
     wrap.appendChild(row);
     wrap.scrollTop = wrap.scrollHeight;
   }
@@ -739,7 +794,7 @@
     const wrap = document.getElementById('messages');
     const typo = document.createElement('div');
     typo.className = 'msg-row ai'; typo.id = 'typo';
-    typo.innerHTML = `<div class="bubble typing"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>`;
+    typo.innerHTML = `<div class="msg-ava">T</div><div class="bubble typing"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>`;
     wrap.appendChild(typo); wrap.scrollTop = wrap.scrollHeight;
     setTimeout(() => {
       const t = document.getElementById('typo'); if (t) t.remove();
