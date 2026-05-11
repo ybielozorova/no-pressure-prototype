@@ -62,8 +62,7 @@
       padding: 4px 0 16px 0; overflow: hidden; min-height: 0;
     }
 
-    /* Chat screen panels row has no bottom padding (bottom-bar handles that space) */
-    #screen-chat .panels-row { padding-bottom: 0; }
+    /* Chat screen panels row padding is managed by JS (updateChatLayout) */
 
     /* ── Bottom bar – full width, 56×56 buttons, space-between ── */
     .bottom-bar {
@@ -716,9 +715,13 @@
 
   function startChat() {
     show('screen-chat');
-    infoOpen = true;
+    infoOpen = true; attOpen = false;
     document.getElementById('ip-chat').classList.remove('collapsed');
     document.getElementById('toggle-info-btn').classList.add('active');
+    document.getElementById('att-panel').classList.remove('open');
+    document.getElementById('toggle-att-btn').classList.remove('active');
+    updateChatLayout();
+    updateFullscreen();
     if (!document.getElementById('messages').children.length)
       addMsg('ai', 'Hey Maya – thanks for setting this up. What\'s on your mind?');
     document.getElementById('msg-input').focus();
@@ -744,6 +747,7 @@
     document.getElementById('ip-chat').classList.toggle('collapsed', !infoOpen);
     document.getElementById('toggle-info-btn').classList.toggle('active', infoOpen);
     updateFullscreen();
+    updateChatLayout();
   }
 
   function toggleAtt() {
@@ -751,15 +755,39 @@
     document.getElementById('att-panel').classList.toggle('open', attOpen);
     document.getElementById('toggle-att-btn').classList.toggle('active', attOpen);
     updateFullscreen();
+    updateChatLayout();
   }
 
   function updateFullscreen() {
     document.getElementById('messages').classList.toggle('fullscreen', !infoOpen && !attOpen);
   }
 
+  function updateChatLayout() {
+    const row = document.querySelector('#screen-chat .panels-row');
+    if (infoOpen && attOpen) {
+      row.style.padding = '4px 16px 0 16px'; row.style.gap = '16px';
+    } else if (infoOpen && !attOpen) {
+      row.style.padding = '4px 0 0 16px'; row.style.gap = '16px';
+    } else if (!infoOpen && attOpen) {
+      row.style.padding = '4px 16px 0 0'; row.style.gap = '16px';
+    } else {
+      row.style.padding = '4px 16px 0 16px'; row.style.gap = '0';
+    }
+  }
+
   function toggleAttPre() {
     attPreOpen = !attPreOpen;
     document.getElementById('att-panel-pre').classList.toggle('open', attPreOpen);
+    updatePreChatLayout();
+  }
+
+  function updatePreChatLayout() {
+    const row = document.querySelector('#screen-prechat .panels-row');
+    if (attPreOpen) {
+      row.style.padding = '4px 16px 16px 16px'; row.style.gap = '16px';
+    } else {
+      row.style.padding = '4px 0 16px 16px'; row.style.gap = '16px';
+    }
   }
 
   function toggleStory(btn) {
@@ -808,6 +836,7 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggle-info-btn').classList.add('active');
+    updatePreChatLayout();
   });
 </script>
 </body>
